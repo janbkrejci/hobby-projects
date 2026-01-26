@@ -7,8 +7,9 @@ import Home from "./page";
 
 vi.mock("next/image", () => ({
   default: (props: ComponentProps<"img"> & { priority?: boolean }) => {
-    const { priority: _priority, ...rest } = props;
-    return <img {...rest} />;
+    const { priority, alt, ...rest } = props;
+    void priority;
+    return <img alt={alt ?? ""} {...rest} />;
   },
 }));
 
