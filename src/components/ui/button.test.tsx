@@ -9,10 +9,10 @@ describe("Button", () => {
     expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
   });
 
-  it("fails intentionally for CI testing", () => {
-    render(<Button>Save</Button>);
+  it("renders the Test2 label", () => {
+    render(<Button>Test2</Button>);
 
-    expect(screen.getByRole("button", { name: "Nope" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Test2" })).toBeInTheDocument();
   });
 
   it("sets variant and size data attributes", () => {
