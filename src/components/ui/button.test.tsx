@@ -9,6 +9,12 @@ describe("Button", () => {
     expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
   });
 
+  it("fails intentionally for CI testing", () => {
+    render(<Button>Save</Button>);
+
+    expect(screen.getByRole("button", { name: "Nope" })).toBeInTheDocument();
+  });
+
   it("sets variant and size data attributes", () => {
     render(
       <Button variant="destructive" size="lg">
