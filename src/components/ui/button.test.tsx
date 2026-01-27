@@ -9,10 +9,15 @@ describe("Button", () => {
     expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
   });
 
-  it("renders the Test2 label", () => {
-    render(<Button>Test2</Button>);
+  it("renders as a link when asChild is true", () => {
+    render(
+      <Button asChild>
+        <a href="/docs">Docs</a>
+      </Button>
+    );
 
-    expect(screen.getByRole("button", { name: "Test2" })).toBeInTheDocument();
+    const link = screen.getByRole("link", { name: "Docs" });
+    expect(link).toHaveAttribute("href", "/docs");
   });
 
   it("sets variant and size data attributes", () => {

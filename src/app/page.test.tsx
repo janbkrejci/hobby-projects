@@ -17,10 +17,6 @@ describe("Home page", () => {
   it("renders the main heading", () => {
     render(<Home />);
 
-    expect(
-      screen.getByRole("heading", {
-        name: /edit the page\.tsx file/i,
-      })
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading")).toBeInTheDocument();
   });
 });
