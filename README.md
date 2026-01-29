@@ -1,4 +1,4 @@
-[![CI](https://github.com/janbkrejci/ci-test/actions/workflows/ci.yml/badge.svg)](https://github.com/janbkrejci/ci-test/actions/workflows/ci.yml)
+[![CI](https://github.com/janbkrejci/hobby-projects/actions/workflows/ci.yml/badge.svg)](https://github.com/janbkrejci/hobby-projects/actions/workflows/ci.yml)
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
@@ -13,8 +13,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - Review my changes as a senior developer and point out risks
 
 vytvoř branch, udělej změnu, pushni, otevři PR, spusť CI a zeptej se:
-- Act as a reviewer and leave review comments
 
+- Act as a reviewer and leave review comments
 
 ## Getting Started
 
