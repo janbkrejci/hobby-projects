@@ -28,15 +28,17 @@ import {
 const HELP_ITEMS = [
   ["Space", "Auto solve cells with single hint"],
   ["Backspace", "Undo last move"],
+  ["C", "Copy board to clipboard"],
   ["G", "Generate new puzzle"],
   ["H", "Toggle pencil marks (hints)"],
   ["L", "Load board from string of 81 digits"],
   ["S", "Show current board as string"],
   ["R", "Reset board to last loaded state"],
+  ["Enter/Return", "Show/hide this help"],
   ["Arrow keys", "Move selection around"],
   ["Escape or 0", "Clear selected cell"],
+  ["Numpad 0-9", "Set value of selected cell"],
   ["1-9", "Set value of selected cell"],
-  ["Return", "Show/hide this help"],
 ];
 
 type Step = {
@@ -280,6 +282,11 @@ export default function SudokuPage() {
         setShowHints((value) => !value);
         return;
       }
+      if (event.code === "KeyC" && !event.metaKey && !event.ctrlKey) {
+        event.preventDefault();
+        handleCopyBoard();
+        return;
+      }
       if (event.code === "KeyL") {
         event.preventDefault();
         handleLoad();
@@ -387,12 +394,19 @@ export default function SudokuPage() {
       ? "bg-red-100 dark:bg-red-900/40"
       : "bg-card";
 
+  const controlButtonClass =
+    "flex min-h-11 w-full min-w-0 items-center justify-between gap-2 rounded-md border border-border bg-background px-3 py-2 text-left text-sm text-foreground shadow-sm transition hover:bg-muted";
+  const keyHintClass =
+    "rounded-md border border-border bg-card px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground";
+
   return (
-    <div className={cn("min-h-screen w-full text-zinc-900", boardStatusClass)}>
+    <div
+      className={cn("min-h-screen w-full text-foreground", boardStatusClass)}
+    >
       <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 px-4 py-8 sm:px-8">
         <header className="flex flex-col gap-2">
           <h1 className="text-3xl font-semibold">Sudoku</h1>
-          <p className="text-sm text-zinc-600">
+          <p className="text-sm text-muted-foreground">
             Press Return to toggle help. Focus the grid and use your keyboard.
           </p>
         </header>
@@ -401,7 +415,7 @@ export default function SudokuPage() {
           <section className="flex w-full items-center justify-center">
             <div
               className={cn(
-                "grid grid-cols-9 gap-0 border border-black shadow-sm",
+                "grid grid-cols-9 gap-0 border border-border shadow-sm",
                 boardSurfaceClass,
               )}
               role="grid"
@@ -439,14 +453,16 @@ export default function SudokuPage() {
                       "relative flex h-10 w-10 items-center justify-center text-lg",
                       "sm:h-12 sm:w-12 sm:text-xl",
                       "md:h-14 md:w-14 md:text-2xl",
-                      "border-black transition-colors",
+                      "border-zinc-300 transition-colors dark:border-zinc-700",
                       borderClasses,
-                      isHighlighted && "bg-emerald-50",
-                      isSelected && "bg-yellow-200",
-                      isError && "bg-yellow-300",
-                      isError && isSelected && "bg-yellow-400",
-                      isLocked && "font-semibold text-zinc-900",
-                      !isLocked && value === 0 && "text-zinc-400",
+                      isHighlighted && "bg-emerald-50 dark:bg-emerald-900/30",
+                      isSelected && "bg-amber-200 dark:bg-amber-600/40",
+                      isError && "bg-rose-200 dark:bg-rose-700/40",
+                      isError &&
+                        isSelected &&
+                        "bg-rose-300 dark:bg-rose-600/50",
+                      isLocked && "font-semibold text-foreground",
+                      !isLocked && value === 0 && "text-muted-foreground",
                     )}
                   >
                     {value !== 0 ? (
@@ -456,7 +472,9 @@ export default function SudokuPage() {
                         className={cn(
                           "grid h-full w-full grid-cols-3 grid-rows-3 text-[0.5rem] leading-none",
                           "sm:text-[0.6rem] md:text-[0.65rem]",
-                          showHints ? "text-zinc-500" : "text-transparent",
+                          showHints
+                            ? "text-muted-foreground"
+                            : "text-transparent",
                         )}
                       >
                         {Array.from({ length: 9 }, (_, n) => {
@@ -480,20 +498,22 @@ export default function SudokuPage() {
 
           <aside
             className={cn(
-              "flex flex-col gap-4 rounded-lg border border-zinc-200 p-4 shadow-sm",
+              "flex flex-col gap-4 rounded-lg border border-border bg-card p-4 shadow-sm",
               solved
-                ? "bg-emerald-100"
+                ? "bg-emerald-100/70 dark:bg-emerald-900/20"
                 : isComplete && hasConflicts
-                  ? "bg-red-100"
-                  : "bg-white",
+                  ? "bg-rose-100/70 dark:bg-rose-900/20"
+                  : "bg-card",
             )}
           >
             <h2 className="text-lg font-semibold">Controls</h2>
-            <div className="grid grid-cols-2 gap-2 text-sm text-zinc-600">
+            <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
               <span>Hints</span>
-              <span>{showHints ? "On" : "Off"}</span>
+              <span className="text-foreground">
+                {showHints ? "On" : "Off"}
+              </span>
               <span>Status</span>
-              <span>
+              <span className="text-foreground">
                 {solved
                   ? "Solved"
                   : isComplete
@@ -503,59 +523,82 @@ export default function SudokuPage() {
                     : "In progress"}
               </span>
               <span>Errors</span>
-              <span>{hasConflicts ? "Yes" : "No"}</span>
+              <span className="text-foreground">
+                {hasConflicts ? "Yes" : "No"}
+              </span>
               <span>Selection</span>
-              <span>{selection + 1}</span>
+              <span className="text-foreground">{selection + 1}</span>
             </div>
-            <div className="flex flex-wrap gap-2 text-sm">
+            <div className="grid gap-2 text-sm sm:grid-cols-2">
               <button
                 type="button"
-                className="rounded-md border border-zinc-200 px-3 py-2 hover:bg-zinc-50"
+                className={controlButtonClass}
                 onClick={handleGenerate}
               >
-                Generate
+                <span className="min-w-0 truncate whitespace-nowrap">
+                  Generate puzzle
+                </span>
+                <kbd className={keyHintClass}>G</kbd>
               </button>
               <button
                 type="button"
-                className="rounded-md border border-zinc-200 px-3 py-2 hover:bg-zinc-50"
+                className={controlButtonClass}
                 onClick={autoSolve}
               >
-                Auto-solve singles
+                <span className="min-w-0 truncate whitespace-nowrap">
+                  Auto-solve singles
+                </span>
+                <kbd className={keyHintClass}>Space</kbd>
               </button>
               <button
                 type="button"
-                className="rounded-md border border-zinc-200 px-3 py-2 hover:bg-zinc-50"
+                className={controlButtonClass}
                 onClick={() => setShowHints((value) => !value)}
               >
-                Toggle hints
+                <span className="min-w-0 truncate whitespace-nowrap">
+                  Toggle hints
+                </span>
+                <kbd className={keyHintClass}>H</kbd>
               </button>
               <button
                 type="button"
-                className="rounded-md border border-zinc-200 px-3 py-2 hover:bg-zinc-50"
+                className={controlButtonClass}
                 onClick={() => handleCopyBoard()}
               >
-                {copied ? "Copied!" : "Copy board"}
+                <span className="min-w-0 truncate whitespace-nowrap">
+                  {copied ? "Copied!" : "Copy board"}
+                </span>
+                <kbd className={keyHintClass}>C</kbd>
               </button>
               <button
                 type="button"
-                className="rounded-md border border-zinc-200 px-3 py-2 hover:bg-zinc-50"
+                className={controlButtonClass}
                 onClick={handleShowString}
               >
-                Show board
+                <span className="min-w-0 truncate whitespace-nowrap">
+                  Show board
+                </span>
+                <kbd className={keyHintClass}>S</kbd>
               </button>
               <button
                 type="button"
-                className="rounded-md border border-zinc-200 px-3 py-2 hover:bg-zinc-50"
+                className={controlButtonClass}
                 onClick={handleLoad}
               >
-                Load board
+                <span className="min-w-0 truncate whitespace-nowrap">
+                  Load board
+                </span>
+                <kbd className={keyHintClass}>L</kbd>
               </button>
               <button
                 type="button"
-                className="rounded-md border border-zinc-200 px-3 py-2 hover:bg-zinc-50"
+                className={controlButtonClass}
                 onClick={handleResetLoaded}
               >
-                Reset
+                <span className="min-w-0 truncate whitespace-nowrap">
+                  Reset board
+                </span>
+                <kbd className={keyHintClass}>R</kbd>
               </button>
             </div>
           </aside>
@@ -578,7 +621,7 @@ export default function SudokuPage() {
             </DialogHeader>
             <div className="mt-4 grid gap-2">
               <label
-                className="text-sm font-medium text-zinc-900"
+                className="text-sm font-medium text-foreground"
                 htmlFor="clues"
               >
                 Clues
@@ -590,9 +633,9 @@ export default function SudokuPage() {
                 max={81}
                 value={generateValue}
                 onChange={(event) => setGenerateValue(event.target.value)}
-                className="rounded-md border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-zinc-400"
+                className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-foreground/40"
               />
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-muted-foreground">
                 Easiest: 47+ | Easy: 36-46 | Medium: 32-35 | Hard: 28-31 |
                 Extremely hard: 21-27
               </p>
@@ -601,14 +644,14 @@ export default function SudokuPage() {
               <DialogClose asChild>
                 <button
                   type="button"
-                  className="rounded-md border border-zinc-200 px-4 py-2 text-sm hover:bg-zinc-50"
+                  className="rounded-md border border-border px-4 py-2 text-sm hover:bg-muted"
                 >
                   Cancel
                 </button>
               </DialogClose>
               <button
                 type="submit"
-                className="rounded-md bg-zinc-900 px-4 py-2 text-sm text-white hover:bg-zinc-800"
+                className="rounded-md bg-foreground px-4 py-2 text-sm text-background hover:bg-foreground/90"
               >
                 Generate
               </button>
@@ -633,7 +676,7 @@ export default function SudokuPage() {
             </DialogHeader>
             <div className="mt-4 grid gap-2">
               <label
-                className="text-sm font-medium text-zinc-900"
+                className="text-sm font-medium text-foreground"
                 htmlFor="board-input"
               >
                 Board string
@@ -646,23 +689,27 @@ export default function SudokuPage() {
                   setLoadValue(event.target.value);
                   if (loadError) setLoadError(null);
                 }}
-                className="rounded-md border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-zinc-400"
+                className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-foreground/40"
                 placeholder="81 digits, e.g. 530070000..."
               />
-              {loadError && <p className="text-xs text-red-600">{loadError}</p>}
+              {loadError && (
+                <p className="text-xs text-rose-600 dark:text-rose-400">
+                  {loadError}
+                </p>
+              )}
             </div>
             <DialogFooter>
               <DialogClose asChild>
                 <button
                   type="button"
-                  className="rounded-md border border-zinc-200 px-4 py-2 text-sm hover:bg-zinc-50"
+                  className="rounded-md border border-border px-4 py-2 text-sm hover:bg-muted"
                 >
                   Cancel
                 </button>
               </DialogClose>
               <button
                 type="submit"
-                className="rounded-md bg-zinc-900 px-4 py-2 text-sm text-white hover:bg-zinc-800"
+                className="rounded-md bg-foreground px-4 py-2 text-sm text-background hover:bg-foreground/90"
               >
                 Load
               </button>
@@ -681,7 +728,7 @@ export default function SudokuPage() {
           </DialogHeader>
           <div className="mt-4 grid gap-2">
             <label
-              className="text-sm font-medium text-zinc-900"
+              className="text-sm font-medium text-foreground"
               htmlFor="board-string"
             >
               Current board
@@ -691,21 +738,21 @@ export default function SudokuPage() {
               rows={4}
               value={boardString}
               readOnly
-              className="rounded-md border border-zinc-200 px-3 py-2 text-sm outline-none"
+              className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none"
             />
           </div>
           <DialogFooter>
             <DialogClose asChild>
               <button
                 type="button"
-                className="rounded-md border border-zinc-200 px-4 py-2 text-sm hover:bg-zinc-50"
+                className="rounded-md border border-border px-4 py-2 text-sm hover:bg-muted"
               >
                 Close
               </button>
             </DialogClose>
             <button
               type="button"
-              className="rounded-md bg-zinc-900 px-4 py-2 text-sm text-white hover:bg-zinc-800"
+              className="rounded-md bg-foreground px-4 py-2 text-sm text-background hover:bg-foreground/90"
               onClick={() => handleCopyBoard(boardString)}
             >
               {copied ? "Copied!" : "Copy to clipboard"}
@@ -732,14 +779,14 @@ export default function SudokuPage() {
               <DialogClose asChild>
                 <button
                   type="button"
-                  className="rounded-md border border-zinc-200 px-4 py-2 text-sm hover:bg-zinc-50"
+                  className="rounded-md border border-border px-4 py-2 text-sm hover:bg-muted"
                 >
                   Cancel
                 </button>
               </DialogClose>
               <button
                 type="submit"
-                className="rounded-md bg-zinc-900 px-4 py-2 text-sm text-white hover:bg-zinc-800"
+                className="rounded-md bg-foreground px-4 py-2 text-sm text-background hover:bg-foreground/90"
                 autoFocus
               >
                 Reset
@@ -750,27 +797,27 @@ export default function SudokuPage() {
       </Dialog>
 
       {showHelp && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/90 p-6">
-          <div className="w-full max-w-2xl rounded-xl border border-zinc-200 bg-white p-6 shadow-lg">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 p-6 backdrop-blur-sm">
+          <div className="w-full max-w-2xl rounded-xl border border-border bg-card p-6 text-foreground shadow-lg">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-2xl font-semibold">Sudoku</h2>
               <button
                 type="button"
-                className="rounded-md border border-zinc-200 px-3 py-1 text-sm"
+                className="rounded-md border border-border px-3 py-1 text-sm hover:bg-muted"
                 onClick={() => setShowHelp(false)}
               >
                 Close
               </button>
             </div>
-            <div className="grid gap-2 text-sm text-zinc-600">
+            <div className="grid gap-2 text-sm text-muted-foreground">
               {HELP_ITEMS.map(([key, description]) => (
                 <div key={key} className="grid grid-cols-[140px_1fr] gap-4">
-                  <span className="font-medium text-zinc-900">{key}</span>
+                  <span className="font-medium text-foreground">{key}</span>
                   <span>{description}</span>
                 </div>
               ))}
             </div>
-            <p className="mt-4 text-xs text-zinc-500">
+            <p className="mt-4 text-xs text-muted-foreground">
               Press Return to toggle this overlay anytime.
             </p>
           </div>
