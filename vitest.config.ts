@@ -12,7 +12,10 @@ export default defineConfig({
       include: [
         "src/lib/**/*.{ts,tsx}",
         "src/components/ui/**/*.{ts,tsx}",
+        "src/components/mode-toggle.tsx",
         "src/components/theme-provider.tsx",
+        "src/app/layout.tsx",
+        "src/app/page.tsx",
       ],
       thresholds: {
         lines: 100,
