@@ -360,6 +360,7 @@ export default function SudokuPage() {
   }, [
     autoSolve,
     handleGenerate,
+    handleCopyBoard,
     handleLoad,
     handleResetLoaded,
     handleShowString,
