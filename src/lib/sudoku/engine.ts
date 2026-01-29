@@ -288,8 +288,7 @@ function create(clues = 50, rng: Rng = Math.random): string {
 
     while (remaining > clues && indices.length) {
       solutions = new Set();
-      const cell = indices.pop();
-      if (cell === undefined) break;
+      const cell = indices.pop()!;
       const oldVal = board[cell];
       board[cell] = 0;
       solve(Array.from(board), solutions, 2, rng);
@@ -300,7 +299,7 @@ function create(clues = 50, rng: Rng = Math.random): string {
       }
     }
 
-    if (remaining === clues) done = true;
+    done = remaining === clues;
   }
 
   return b2s(board);
