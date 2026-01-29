@@ -1,4 +1,20 @@
+[![CI](https://github.com/janbkrejci/ci-test/actions/workflows/ci.yml/badge.svg)](https://github.com/janbkrejci/ci-test/actions/workflows/ci.yml)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Prompts to try in Codex
+
+- Review my last commit and suggest improvements
+- Prepare a clean commit history before merging
+- Why is the CI failing?
+- Fix the CI failure but do not change application logic
+- Generate a clear pull request description for my changes
+- před odesláním PR
+- Review my changes as a senior developer and point out risks
+
+vytvoř branch, udělej změnu, pushni, otevři PR, spusť CI a zeptej se:
+- Act as a reviewer and leave review comments
+
 
 ## Getting Started
 
