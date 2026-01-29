@@ -4,20 +4,17 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Prompts to try in Codex
 
-Review my last commit and suggest improvements
+- Review my last commit and suggest improvements
+- Prepare a clean commit history before merging
+- Why is the CI failing?
+- Fix the CI failure but do not change application logic
+- Generate a clear pull request description for my changes
+- před odesláním PR
+- Review my changes as a senior developer and point out risks
 
-Prepare a clean commit history before merging
+vytvoř branch, udělej změnu, pushni, otevři PR, spusť CI a zeptej se:
 
-Why is the CI failing?
-
-Fix the CI failure but do not change application logic
-
-Generate a clear pull request description for my changes
-
-před odesláním PR
-
-Review my changes as a senior developer and point out risks
-
+- Act as a reviewer and leave review comments
 
 ## Getting Started
 
