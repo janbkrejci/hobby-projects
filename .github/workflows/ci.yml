@@ -30,5 +30,12 @@ jobs:
       - name: Test
         run: npm run test -- --run
 
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage
+          if-no-files-found: warn
+
       - name: Build
         run: npm run build
