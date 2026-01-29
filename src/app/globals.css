@@ -122,3 +122,26 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  html.sudoku-solved,
+  html.sudoku-solved body {
+    @apply bg-emerald-50 dark:bg-emerald-950;
+  }
+  html.sudoku-error,
+  html.sudoku-error body {
+    @apply bg-rose-50 dark:bg-rose-950;
+  }
+  html.sudoku-solved .sudoku-status-toggle {
+    @apply border-emerald-200 bg-emerald-50/80 hover:bg-emerald-100 dark:border-emerald-800/60 dark:bg-emerald-950/80 dark:hover:bg-emerald-900/80;
+  }
+  html.sudoku-error .sudoku-status-toggle {
+    @apply border-rose-200 bg-rose-50/80 hover:bg-rose-100 dark:border-rose-800/60 dark:bg-rose-950/80 dark:hover:bg-rose-900/80;
+  }
+  html.sudoku-solved .sudoku-status-dropdown {
+    @apply border-emerald-200 bg-emerald-50 dark:border-emerald-800/60 dark:bg-emerald-950/80;
+  }
+  html.sudoku-error .sudoku-status-dropdown {
+    @apply border-rose-200 bg-rose-50 dark:border-rose-800/60 dark:bg-rose-950/80;
+  }
+}

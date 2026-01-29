@@ -382,22 +382,53 @@ export default function SudokuPage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const body = document.body;
+    const root = document.documentElement;
+    body.classList.remove("sudoku-solved", "sudoku-error");
+    root.classList.remove("sudoku-solved", "sudoku-error");
+    if (solved) {
+      body.classList.add("sudoku-solved");
+      root.classList.add("sudoku-solved");
+    } else if (isComplete && hasConflicts) {
+      body.classList.add("sudoku-error");
+      root.classList.add("sudoku-error");
+    }
+    return () => {
+      body.classList.remove("sudoku-solved", "sudoku-error");
+      root.classList.remove("sudoku-solved", "sudoku-error");
+    };
+  }, [solved, isComplete, hasConflicts]);
+
   const { row: selectedRow, col: selectedCol } = indexToRowCol(selection);
   const boardStatusClass = solved
-    ? "bg-emerald-50 dark:bg-emerald-950/40"
+    ? "bg-emerald-50 dark:bg-emerald-950/70"
     : isComplete && hasConflicts
-      ? "bg-red-50 dark:bg-red-950/40"
+      ? "bg-red-50 dark:bg-red-950/70"
       : "bg-background";
   const boardSurfaceClass = solved
-    ? "bg-emerald-100 dark:bg-emerald-900/40"
+    ? "bg-emerald-100 dark:bg-emerald-900/60"
     : isComplete && hasConflicts
-      ? "bg-red-100 dark:bg-red-900/40"
+      ? "bg-red-100 dark:bg-red-900/60"
       : "bg-card";
 
-  const controlButtonClass =
-    "flex min-h-11 w-full min-w-0 items-center justify-between gap-2 rounded-md border border-border bg-background px-3 py-2 text-left text-sm text-foreground shadow-sm transition hover:bg-muted";
-  const keyHintClass =
-    "rounded-md border border-border bg-card px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground";
+  const controlButtonClass = cn(
+    "flex min-h-11 w-full min-w-0 items-center justify-between gap-2 rounded-md border border-border px-3 py-2 text-left text-sm text-foreground shadow-sm transition",
+    solved
+      ? "bg-emerald-50/80 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60"
+      : isComplete && hasConflicts
+        ? "bg-rose-50/80 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/60"
+        : "bg-background hover:bg-muted",
+  );
+  const keyHintClass = cn(
+    "rounded-md border border-border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide",
+    solved
+      ? "border-emerald-200 bg-emerald-100 text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-900/60 dark:text-emerald-50"
+      : isComplete && hasConflicts
+        ? "border-rose-200 bg-rose-100 text-rose-800 dark:border-rose-800/60 dark:bg-rose-900/60 dark:text-rose-50"
+        : "bg-card text-muted-foreground",
+  );
 
   return (
     <div
