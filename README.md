@@ -9,8 +9,11 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - Why is the CI failing?
 - Fix the CI failure but do not change application logic
 - Generate a clear pull request description for my changes
-- před odesláním PR
+
+před odesláním PR
+
 - Review my changes as a senior developer and point out risks
+- nebo Suggest improvements focused on readability and maintainability
 
 vytvoř branch, udělej změnu, pushni, otevři PR, spusť CI a zeptej se:
 
