@@ -2,6 +2,8 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 const BASE_DIR = path.resolve(process.cwd(), "src", "lib", "morphic-widgets");
+const MORPHIC_RAW_URL =
+  "https://raw.githubusercontent.com/jmoenig/morphic.js/master/morphic.js";
 
 function contentTypeFor(filePath: string): string {
   const ext = path.extname(filePath).toLowerCase();
@@ -29,6 +31,25 @@ export async function GET(
 
   if (!resolved.startsWith(BASE_DIR + path.sep)) {
     return new Response("Not found", { status: 404 });
+  }
+
+  if (safeName === "morphic.js") {
+    try {
+      const upstream = await fetch(MORPHIC_RAW_URL, {
+        headers: { Accept: "application/javascript" },
+      });
+      if (!upstream.ok) {
+        return new Response("Upstream error", { status: 502 });
+      }
+      const data = await upstream.arrayBuffer();
+      return new Response(data, {
+        headers: {
+          "content-type": "application/javascript; charset=utf-8",
+        },
+      });
+    } catch {
+      return new Response("Upstream error", { status: 502 });
+    }
   }
 
   try {
