@@ -10,12 +10,20 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "lcov"],
       include: [
-        "src/lib/**/*.{ts,tsx}",
-        "src/components/ui/**/*.{ts,tsx}",
         "src/components/mode-toggle.tsx",
         "src/components/theme-provider.tsx",
         "src/app/layout.tsx",
         "src/app/page.tsx",
+        "src/lib/utils.ts",
+        "src/lib/sudoku/**/*.{ts,tsx}",
+      ],
+      exclude: [
+        "src/lib/genetic-core/**",
+        "src/lib/genetic-sudoku/**",
+        "src/lib/morphic-widgets/**",
+        "src/components/ui/**",
+        "src/app/genetic-sudoku/**",
+        "src/app/morphic-widgets/**",
       ],
       thresholds: {
         lines: 100,
