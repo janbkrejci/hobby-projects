@@ -83,11 +83,7 @@ export function selectParent(population: SudokuIndividual[]): SudokuIndividual {
   return population[population.length - 1];
 }
 
-export function crossover(
-  parent1: SudokuIndividual,
-  _parent2: SudokuIndividual,
-  _immutablePositions: boolean[][],
-): SudokuIndividual {
+export function crossover(parent1: SudokuIndividual): SudokuIndividual {
   return R.clone(parent1);
 }
 

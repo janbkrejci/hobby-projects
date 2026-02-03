@@ -71,11 +71,10 @@ export class SudokuSolver {
       );
 
       const geneticAlgorithm = new GeneticAlgorithm<number[]>(this.config, {
-        createIndividual: (_length: number) =>
+        createIndividual: () =>
           createIndividual(initialBoard, this.immutablePositions),
 
-        crossover: (parent1: SudokuIndividual, parent2: SudokuIndividual) =>
-          crossover(parent1, parent2, this.immutablePositions),
+        crossover: (parent1: SudokuIndividual) => crossover(parent1),
 
         mutate: (individual: SudokuIndividual, mutationRate: number) =>
           mutate(individual, mutationRate, this.immutablePositions),
