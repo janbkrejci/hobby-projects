@@ -2,6 +2,26 @@
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Quality & CI
+
+- CI runs on every push and PR: `lint`, `format:check` (Prettier), `test`, `build`.
+- Formatting is enforced locally via **Husky** pre-commit hook + **lint-staged**.
+
+Useful commands:
+
+```bash
+npm run lint
+npm run format:check
+npm run test
+npm run build
+```
+
+Pre-commit hook:
+
+```bash
+npx lint-staged
+```
+
 ## Prompts to try in Codex
 
 - Review my last commit and suggest improvements
