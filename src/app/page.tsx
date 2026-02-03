@@ -24,6 +24,20 @@ export default function Home() {
             </span>
           </Link>
           <Link
+            href="/genetic-sudoku"
+            className="group flex h-full flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div>
+              <h2 className="text-xl font-semibold">Genetic Sudoku</h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Tune genetic parameters and watch the solver evolve a solution.
+              </p>
+            </div>
+            <span className="mt-6 text-sm font-medium text-foreground">
+              Open Genetic Solver →
+            </span>
+          </Link>
+          <Link
             href="/morphic-widgets/index.html"
             className="group flex h-full flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
