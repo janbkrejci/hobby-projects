@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Morphic Calculator</title>
+    <script type="text/javascript" src="https://raw.githubusercontent.com/jmoenig/morphic.js/master/morphic.js"></script>
+    <script type="text/javascript" src="calculator.js"></script>
+    <script type="text/javascript" src="fxrates.js"></script>
+    <script type="text/javascript">
+        var world;
+
+        window.onload = function () {
+            world = new WorldMorph(document.getElementById('world'));
+            // window.world = world;
+            // Set dev mode based on URL hash
+            world.isDevMode = window.location.hash === '#devel';
+            
+            // Set background color to white
+            world.setColor(new Color(255, 255, 255));
+
+            // Override context menu only if NOT in developer mode
+            if (!world.isDevMode) {
+                WorldMorph.prototype.contextMenu = function () {
+                    var menu = new MenuMorph(this, 'TheSystem');
+                    menu.addItem('Kalkulačka', () => {
+                        var calc = new CalculatorMorph();
+                        calc.pickUp(this);
+                    });
+                    menu.addItem('Kurzy', () => {
+                        var rates = new FXRatesMorph();
+                        rates.pickUp(this);
+                    });
+                    menu.popUpAtHand(this);
+                };
+            } else {
+                var calcTemplate = new CalculatorMorph();
+                Morph.prototype.addToDemoMenu.call(calcTemplate, calcTemplate);
+                
+                var ratesTemplate = new FXRatesMorph();
+                Morph.prototype.addToDemoMenu.call(ratesTemplate, ratesTemplate);
+            }
+
+            loop();
+        };
+
+        function loop() {
+            requestAnimationFrame(loop);
+            world.doOneCycle();
+        }
+    </script>
+</head>
+
+<body style="margin: 0; background-color: white;">
+    <canvas id="world" tabindex="1" width="800" height="600" style="position: absolute;"></canvas>
+</body>
+
+</html>
