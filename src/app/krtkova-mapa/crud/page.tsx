@@ -40,7 +40,6 @@ const ITEMS_PER_PAGE = 10;
 
 export default function KrtkovaMapaCrudPage() {
   const router = useRouter();
-  const [ready, setReady] = useState(false);
   const [records, setRecords] = useState<GeoRecord[]>([]);
   const [formData, setFormData] = useState<Omit<GeoRecord, "id">>({
     latitude: "",
@@ -53,23 +52,23 @@ export default function KrtkovaMapaCrudPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
+  const [ready] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      localStorage.getItem("isAuthenticated") === "true",
+  );
+
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
-    if (!isAuthenticated) {
+    if (!ready) {
       router.replace("/krtkova-mapa/login");
       return;
     }
-    setReady(true);
-  }, [router]);
-
-  useEffect(() => {
-    if (!ready) return;
     const loadRecords = async () => {
       const loadedRecords = await readGeoRecords();
       setRecords(loadedRecords);
     };
     loadRecords();
-  }, [ready]);
+  }, [ready, router]);
 
   const filteredRecords = useMemo(
     () =>
@@ -158,7 +157,11 @@ export default function KrtkovaMapaCrudPage() {
         try {
           const importedRecords = JSON.parse(content) as GeoRecord[];
           for (const record of importedRecords) {
-            const { id, ...recordWithoutId } = record;
+            const recordWithoutId = {
+              latitude: record.latitude,
+              longitude: record.longitude,
+              description: record.description,
+            };
             await createGeoRecord(recordWithoutId);
           }
           await loadRecords();
