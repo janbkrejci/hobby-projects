@@ -30,6 +30,12 @@ type FloodRecord = {
 };
 
 const API_URL = "/api/flood-scraper";
+const DEFAULT_CHART_COLORS = {
+  stroke: "hsl(180 60% 40%)",
+  fill: "hsl(215 80% 30% / 0.35)",
+  grid: "hsl(220 10% 70% / 0.2)",
+  text: "currentColor",
+};
 
 function parseDate(dateString: string) {
   const trimmed = dateString.trim();
@@ -187,15 +193,9 @@ async function fetchData(): Promise<FloodRecord[]> {
 export default function FloodScraperPage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart<"line"> | null>(null);
-  const defaultColorsRef = useRef({
-    stroke: "hsl(180 60% 40%)",
-    fill: "hsl(215 80% 30% / 0.35)",
-    grid: "hsl(220 10% 70% / 0.2)",
-    text: "currentColor",
-  });
   const [status, setStatus] = useState("Načítám data o hladině Výrovky...");
   const [lastRecord, setLastRecord] = useState<FloodRecord | null>(null);
-  const [chartColors, setChartColors] = useState(defaultColorsRef.current);
+  const [chartColors, setChartColors] = useState(DEFAULT_CHART_COLORS);
 
   const lastRecordLabel = useMemo(() => {
     if (!lastRecord) return "";
@@ -225,7 +225,7 @@ export default function FloodScraperPage() {
       const grid = rootStyles.getPropertyValue("--border").trim();
       const text = rootStyles.getPropertyValue("--foreground").trim();
 
-      const fallback = defaultColorsRef.current;
+      const fallback = DEFAULT_CHART_COLORS;
       return {
         stroke: stroke || fallback.stroke,
         fill: withAlpha(stroke || fallback.stroke, 0.3) || fallback.fill,
@@ -259,12 +259,12 @@ export default function FloodScraperPage() {
           {
             label: "Hladina vody (cm)",
             data: [],
-            borderColor: chartColors.stroke,
+            borderColor: DEFAULT_CHART_COLORS.stroke,
             borderWidth: 2,
             pointRadius: 1,
             pointHoverRadius: 5,
             fill: true,
-            backgroundColor: chartColors.fill,
+            backgroundColor: DEFAULT_CHART_COLORS.fill,
             tension: 0.2,
           },
         ],
@@ -276,7 +276,7 @@ export default function FloodScraperPage() {
           legend: {
             display: true,
             labels: {
-              color: chartColors.text,
+              color: DEFAULT_CHART_COLORS.text,
             },
           },
           tooltip: {
@@ -292,10 +292,10 @@ export default function FloodScraperPage() {
           x: {
             type: "category",
             grid: {
-              color: chartColors.grid,
+              color: DEFAULT_CHART_COLORS.grid,
             },
             ticks: {
-              color: chartColors.text,
+              color: DEFAULT_CHART_COLORS.text,
               maxRotation: 0,
               autoSkip: true,
             },
@@ -303,11 +303,11 @@ export default function FloodScraperPage() {
           y: {
             beginAtZero: false,
             ticks: {
-              color: chartColors.text,
+              color: DEFAULT_CHART_COLORS.text,
               callback: (value) => `${value} cm`,
             },
             grid: {
-              color: chartColors.grid,
+              color: DEFAULT_CHART_COLORS.grid,
             },
           },
         },
