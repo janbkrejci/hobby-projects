@@ -70,11 +70,7 @@ export class NeuralNetwork {
   /**
    * Train the network using a simplified loop (no backpropagation).
    */
-  train(
-    trainingData: [number[], number[]][],
-    epochs: number = 1000,
-    _learningRate: number = 0.1,
-  ): number[] {
+  train(trainingData: [number[], number[]][], epochs: number = 1000): number[] {
     const errors: number[] = [];
 
     for (let epoch = 0; epoch < epochs; epoch += 1) {

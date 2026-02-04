@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,22 +38,33 @@ export default function NeuralNetworkPage() {
   const [perceptronInputs, setPerceptronInputs] = useState<number[]>(
     INITIAL_PERCEPTRON_INPUTS,
   );
-  const [perceptronOutput, setPerceptronOutput] = useState<number | null>(null);
-  const [perceptronWeights, setPerceptronWeights] = useState<number[]>([]);
-  const [perceptronBias, setPerceptronBias] = useState<number>(0);
-  const [perceptronTrained, setPerceptronTrained] = useState(false);
-
   const [networkInputs, setNetworkInputs] = useState<number[]>(
     INITIAL_NETWORK_INPUTS,
   );
-  const [networkOutput, setNetworkOutput] = useState<number[] | null>(null);
-  const [networkArchitecture, setNetworkArchitecture] = useState<string>("");
-  const [network, setNetwork] = useState<NeuralNetwork | null>(null);
   const [hiddenLayerSize, setHiddenLayerSize] = useState<number>(
     INITIAL_HIDDEN_LAYER_SIZE,
   );
   const [activationFunction, setActivationFunction] =
     useState<string>(INITIAL_ACTIVATION);
+
+  const trainedPerceptron = useMemo(() => {
+    const perceptron = new Perceptron(2, activationFunctions.step);
+    perceptron.trainBatch(OR_TRAINING_DATA, 100, 0.1);
+    return perceptron;
+  }, []);
+
+  const perceptronWeights = useMemo(
+    () => trainedPerceptron.getWeights(),
+    [trainedPerceptron],
+  );
+  const perceptronBias = useMemo(
+    () => trainedPerceptron.getBias(),
+    [trainedPerceptron],
+  );
+  const perceptronOutput = useMemo(
+    () => trainedPerceptron.forward(perceptronInputs),
+    [perceptronInputs, trainedPerceptron],
+  );
 
   const activationLabel = useMemo(() => {
     return (
@@ -62,60 +73,29 @@ export default function NeuralNetworkPage() {
     );
   }, [activationFunction]);
 
-  const buildNetwork = useCallback(
-    (hiddenSize: number, activation: string, inputs: number[]) => {
-      const activationFn =
-        activation === "relu"
-          ? activationFunctions.relu
-          : activation === "tanh"
-            ? activationFunctions.tanh
-            : activationFunctions.sigmoid;
+  const network = useMemo(() => {
+    const activationFn =
+      activationFunction === "relu"
+        ? activationFunctions.relu
+        : activationFunction === "tanh"
+          ? activationFunctions.tanh
+          : activationFunctions.sigmoid;
 
-      const newNetwork = new NeuralNetwork(2, [
-        { size: hiddenSize, activation: activationFn },
-        { size: 1, activation: activationFunctions.sigmoid },
-      ]);
+    return new NeuralNetwork(2, [
+      { size: hiddenLayerSize, activation: activationFn },
+      { size: 1, activation: activationFunctions.sigmoid },
+    ]);
+  }, [activationFunction, hiddenLayerSize]);
 
-      setNetwork(newNetwork);
-      setNetworkArchitecture(`2-${hiddenSize}-1`);
-      setNetworkOutput(newNetwork.forward(inputs));
-    },
-    [],
+  const networkArchitecture = useMemo(
+    () => `2-${hiddenLayerSize}-1`,
+    [hiddenLayerSize],
   );
 
-  useEffect(() => {
-    const perceptron = new Perceptron(2, activationFunctions.step);
-    perceptron.trainBatch(OR_TRAINING_DATA, 100, 0.1);
-
-    setPerceptronWeights(perceptron.getWeights());
-    setPerceptronBias(perceptron.getBias());
-    setPerceptronTrained(true);
-
-    buildNetwork(
-      INITIAL_HIDDEN_LAYER_SIZE,
-      INITIAL_ACTIVATION,
-      INITIAL_NETWORK_INPUTS,
-    );
-  }, [buildNetwork]);
-
-  const calculatePerceptronOutput = useCallback(() => {
-    if (!perceptronTrained) return;
-
-    const perceptron = new Perceptron(2, activationFunctions.step);
-    perceptron.setWeights(perceptronWeights);
-    perceptron.setBias(perceptronBias);
-
-    setPerceptronOutput(perceptron.forward(perceptronInputs));
-  }, [perceptronBias, perceptronInputs, perceptronTrained, perceptronWeights]);
-
-  useEffect(() => {
-    calculatePerceptronOutput();
-  }, [calculatePerceptronOutput]);
-
-  useEffect(() => {
-    if (!network) return;
-    setNetworkOutput(network.forward(networkInputs));
-  }, [network, networkInputs]);
+  const networkOutput = useMemo(
+    () => network.forward(networkInputs),
+    [network, networkInputs],
+  );
 
   const handlePerceptronInputChange = (index: number, value: string) => {
     const nextInputs = [...perceptronInputs];
@@ -136,12 +116,10 @@ export default function NeuralNetworkPage() {
     const parsed = Number(value);
     const next = Number.isNaN(parsed) ? 1 : Math.max(1, parsed);
     setHiddenLayerSize(next);
-    buildNetwork(next, activationFunction, networkInputs);
   };
 
   const handleActivationChange = (value: string) => {
     setActivationFunction(value);
-    buildNetwork(hiddenLayerSize, value, networkInputs);
   };
 
   return (
@@ -190,7 +168,7 @@ export default function NeuralNetworkPage() {
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-muted-foreground">Bias</span>
                     <span className="font-mono">
-                      {perceptronTrained ? perceptronBias.toFixed(3) : "..."}
+                      {perceptronBias.toFixed(3)}
                     </span>
                   </div>
                 </div>
