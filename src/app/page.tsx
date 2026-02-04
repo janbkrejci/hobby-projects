@@ -67,6 +67,20 @@ export default function Home() {
             </span>
           </Link>
           <Link
+            href="/neural-network"
+            className="group flex h-full flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div>
+              <h2 className="text-xl font-semibold">Neural Network</h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Playground s perceptronem a jednoduchou dopřednou sítí.
+              </p>
+            </div>
+            <span className="mt-6 text-sm font-medium text-foreground">
+              Otevřít playground →
+            </span>
+          </Link>
+          <Link
             href="/flood-scraper"
             className="group flex h-full flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
