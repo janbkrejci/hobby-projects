@@ -29,7 +29,9 @@
         var isDark =
           window.matchMedia &&
           window.matchMedia("(prefers-color-scheme: dark)").matches;
-        var background = isDark ? new Color(20, 20, 20) : new Color(255, 255, 255);
+        var background = isDark
+          ? new Color(20, 20, 20)
+          : new Color(255, 255, 255);
         if (world) {
           world.setColor(background);
         }
