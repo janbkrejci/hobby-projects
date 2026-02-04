@@ -18,7 +18,7 @@ describe("Home page", () => {
     render(<Home />);
 
     expect(
-      screen.getByRole("heading", { name: /projects/i }),
+      screen.getByRole("heading", { name: /projekty/i }),
     ).toBeInTheDocument();
   });
 });
