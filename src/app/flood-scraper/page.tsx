@@ -195,7 +195,7 @@ export default function FloodScraperPage() {
   const chartRef = useRef<Chart<"line"> | null>(null);
   const [status, setStatus] = useState("Načítám data o hladině Výrovky...");
   const [lastRecord, setLastRecord] = useState<FloodRecord | null>(null);
-  const [chartColors, setChartColors] = useState(DEFAULT_CHART_COLORS);
+  const chartColorsRef = useRef(DEFAULT_CHART_COLORS);
 
   const lastRecordLabel = useMemo(() => {
     if (!lastRecord) return "";
@@ -234,10 +234,36 @@ export default function FloodScraperPage() {
       };
     };
 
-    setChartColors(readColors());
+    const applyColors = (nextColors: typeof DEFAULT_CHART_COLORS) => {
+      chartColorsRef.current = nextColors;
+      const chart = chartRef.current;
+      if (!chart) return;
+
+      const dataset = chart.data.datasets[0];
+      dataset.borderColor = nextColors.stroke;
+      dataset.backgroundColor = nextColors.fill;
+      if (chart.options.plugins?.legend?.labels) {
+        chart.options.plugins.legend.labels.color = nextColors.text;
+      }
+      if (chart.options.scales?.x?.ticks) {
+        chart.options.scales.x.ticks.color = nextColors.text;
+      }
+      if (chart.options.scales?.y?.ticks) {
+        chart.options.scales.y.ticks.color = nextColors.text;
+      }
+      if (chart.options.scales?.x?.grid) {
+        chart.options.scales.x.grid.color = nextColors.grid;
+      }
+      if (chart.options.scales?.y?.grid) {
+        chart.options.scales.y.grid.color = nextColors.grid;
+      }
+      chart.update();
+    };
+
+    applyColors(readColors());
 
     const observer = new MutationObserver(() => {
-      setChartColors(readColors());
+      applyColors(readColors());
     });
 
     observer.observe(document.documentElement, {
@@ -315,37 +341,34 @@ export default function FloodScraperPage() {
     });
 
     chartRef.current = chart;
+    const colors = chartColorsRef.current;
+    if (colors !== DEFAULT_CHART_COLORS) {
+      const dataset = chart.data.datasets[0];
+      dataset.borderColor = colors.stroke;
+      dataset.backgroundColor = colors.fill;
+      if (chart.options.plugins?.legend?.labels) {
+        chart.options.plugins.legend.labels.color = colors.text;
+      }
+      if (chart.options.scales?.x?.ticks) {
+        chart.options.scales.x.ticks.color = colors.text;
+      }
+      if (chart.options.scales?.y?.ticks) {
+        chart.options.scales.y.ticks.color = colors.text;
+      }
+      if (chart.options.scales?.x?.grid) {
+        chart.options.scales.x.grid.color = colors.grid;
+      }
+      if (chart.options.scales?.y?.grid) {
+        chart.options.scales.y.grid.color = colors.grid;
+      }
+      chart.update();
+    }
 
     return () => {
       chart.destroy();
       chartRef.current = null;
     };
   }, []);
-
-  useEffect(() => {
-    const chart = chartRef.current;
-    if (!chart) return;
-
-    const dataset = chart.data.datasets[0];
-    dataset.borderColor = chartColors.stroke;
-    dataset.backgroundColor = chartColors.fill;
-    if (chart.options.plugins?.legend?.labels) {
-      chart.options.plugins.legend.labels.color = chartColors.text;
-    }
-    if (chart.options.scales?.x?.ticks) {
-      chart.options.scales.x.ticks.color = chartColors.text;
-    }
-    if (chart.options.scales?.y?.ticks) {
-      chart.options.scales.y.ticks.color = chartColors.text;
-    }
-    if (chart.options.scales?.x?.grid) {
-      chart.options.scales.x.grid.color = chartColors.grid;
-    }
-    if (chart.options.scales?.y?.grid) {
-      chart.options.scales.y.grid.color = chartColors.grid;
-    }
-    chart.update();
-  }, [chartColors]);
 
   useEffect(() => {
     let isMounted = true;
