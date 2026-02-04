@@ -1,11 +1,18 @@
-"use client";
-
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { Database } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import MapView from "./components/MapView";
+
+const MapView = dynamic(() => import("./components/MapView"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground">
+      Načítám mapu…
+    </div>
+  ),
+});
 
 export default function KrtkovaMapaPage() {
   return (
