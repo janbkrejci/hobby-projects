@@ -19,7 +19,7 @@ const MapView = dynamic(() => import("./components/MapView"), {
 export default function KrtkovaMapaPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <Card className="rounded-none border-x-0 border-t-0">
+      <Card className="relative z-10 mx-auto w-full max-w-6xl rounded-none border-x-0 border-t-0 bg-transparent">
         <CardHeader className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <div>
             <CardTitle>Mapa památných míst</CardTitle>
@@ -35,7 +35,7 @@ export default function KrtkovaMapaPage() {
           </Button>
         </CardHeader>
       </Card>
-      <div className="h-[calc(100vh-120px)] w-full">
+      <div className="relative z-0 h-[calc(100vh-120px)] w-full">
         <MapView />
       </div>
     </div>

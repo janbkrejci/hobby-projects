@@ -4,11 +4,11 @@ export default function Home() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
       <main className="w-full max-w-4xl px-6 py-16">
-        <h1 className="text-3xl font-semibold">Projects</h1>
+        <h1 className="text-3xl font-semibold">Projekty</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Start a game or explore the Sudoku demo.
+          Spusť hru nebo prozkoumej ukázky.
         </p>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        <div className="mt-8 grid auto-rows-fr gap-4 sm:grid-cols-2">
           <Link
             href="/sudoku"
             className="group flex h-full flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
@@ -16,11 +16,12 @@ export default function Home() {
             <div>
               <h2 className="text-xl font-semibold">Sudoku</h2>
               <p className="mt-2 text-sm text-muted-foreground">
-                Play a generated puzzle with hints, undo, and keyboard support.
+                Zahraj si vygenerované sudoku s nápovědami, vracením tahů a
+                podporou klávesnice.
               </p>
             </div>
             <span className="mt-6 text-sm font-medium text-foreground">
-              Open Sudoku →
+              Otevřít Sudoku →
             </span>
           </Link>
           <Link
@@ -30,25 +31,25 @@ export default function Home() {
             <div>
               <h2 className="text-xl font-semibold">Genetic Sudoku</h2>
               <p className="mt-2 text-sm text-muted-foreground">
-                Tune genetic parameters and watch the solver evolve a solution.
+                Uprav parametry a sleduj, jak evoluční solver hledá řešení.
               </p>
             </div>
             <span className="mt-6 text-sm font-medium text-foreground">
-              Open Genetic Solver →
+              Otevřít genetický solver →
             </span>
           </Link>
           <Link
-            href="/morphic-widgets/index.html"
+            href="/morphic-widgets"
             className="group flex h-full flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
             <div>
               <h2 className="text-xl font-semibold">Morphic Widgets</h2>
               <p className="mt-2 text-sm text-muted-foreground">
-                Explore the morphic.js widget demos and utilities.
+                Prozkoumej ukázky widgetů a utility z morphic.js.
               </p>
             </div>
             <span className="mt-6 text-sm font-medium text-foreground">
-              Open Morphic Widgets →
+              Otevřít Morphic Widgets →
             </span>
           </Link>
           <Link
@@ -63,6 +64,20 @@ export default function Home() {
             </div>
             <span className="mt-6 text-sm font-medium text-foreground">
               Otevřít mapu →
+            </span>
+          </Link>
+          <Link
+            href="/flood-scraper"
+            className="group flex h-full flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div>
+              <h2 className="text-xl font-semibold">Hladina Výrovky</h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Graf historických měření s automatickou aktualizací.
+              </p>
+            </div>
+            <span className="mt-6 text-sm font-medium text-foreground">
+              Otevřít graf →
             </span>
           </Link>
         </div>

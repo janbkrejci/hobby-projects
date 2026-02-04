@@ -6,8 +6,34 @@
     <script type="text/javascript" src="/morphic-widgets/morphic.js"></script>
     <script type="text/javascript" src="calculator.js"></script>
     <script type="text/javascript" src="fxrates.js"></script>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+
+      body {
+        margin: 0;
+        background-color: #ffffff;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #141414;
+        }
+      }
+    </style>
     <script type="text/javascript">
       var world;
+
+      function applyTheme() {
+        var isDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var background = isDark ? new Color(20, 20, 20) : new Color(255, 255, 255);
+        if (world) {
+          world.setColor(background);
+        }
+      }
 
       window.onload = function () {
         world = new WorldMorph(document.getElementById("world"));
@@ -15,8 +41,12 @@
         // Set dev mode based on URL hash
         world.isDevMode = window.location.hash === "#devel";
 
-        // Set background color to white
-        world.setColor(new Color(255, 255, 255));
+        applyTheme();
+
+        if (window.matchMedia) {
+          var media = window.matchMedia("(prefers-color-scheme: dark)");
+          media.addEventListener("change", applyTheme);
+        }
 
         // Override context menu only if NOT in developer mode
         if (!world.isDevMode) {
@@ -50,7 +80,7 @@
     </script>
   </head>
 
-  <body style="margin: 0; background-color: white">
+  <body>
     <canvas
       id="world"
       tabindex="1"

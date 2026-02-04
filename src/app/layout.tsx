@@ -4,6 +4,7 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import "./globals.css";
 
 import { ModeToggle } from "@/components/mode-toggle";
+import { HomeFab } from "@/components/home-fab";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ export default function RootLayout({
             <div className="fixed right-6 top-6 z-50">
               <ModeToggle />
             </div>
+            <HomeFab />
             {children}
           </div>
         </ThemeProvider>
