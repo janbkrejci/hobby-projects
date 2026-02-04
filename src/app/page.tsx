@@ -51,6 +51,20 @@ export default function Home() {
               Open Morphic Widgets →
             </span>
           </Link>
+          <Link
+            href="/krtkova-mapa"
+            className="group flex h-full flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div>
+              <h2 className="text-xl font-semibold">Krtkova mapa</h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Interaktivní mapa památných míst s lokální databází.
+              </p>
+            </div>
+            <span className="mt-6 text-sm font-medium text-foreground">
+              Otevřít mapu →
+            </span>
+          </Link>
         </div>
       </main>
     </div>

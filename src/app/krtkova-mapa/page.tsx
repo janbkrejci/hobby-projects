@@ -1,0 +1,34 @@
+"use client";
+
+import Link from "next/link";
+import { Database } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import MapView from "./components/MapView";
+
+export default function KrtkovaMapaPage() {
+  return (
+    <div className="flex min-h-screen flex-col bg-background">
+      <Card className="rounded-none border-x-0 border-t-0">
+        <CardHeader className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <div>
+            <CardTitle>Mapa památných míst</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Přehled lokalit uložených v databázi Krtkovy mapy.
+            </p>
+          </div>
+          <Button asChild className="w-full md:w-auto">
+            <Link href="/krtkova-mapa/crud">
+              <Database className="mr-2 h-4 w-4" />
+              Spravovat data
+            </Link>
+          </Button>
+        </CardHeader>
+      </Card>
+      <div className="h-[calc(100vh-120px)] w-full">
+        <MapView />
+      </div>
+    </div>
+  );
+}
