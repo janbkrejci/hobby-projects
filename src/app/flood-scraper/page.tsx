@@ -29,13 +29,45 @@ type FloodRecord = {
   waterHeight: number;
 };
 
-const API_URL = "/api/flood-scraper";
+const TARGET_URL = "https://hydro.chmi.cz/hppsoldv/hpps_prfdata.php?seq=307024";
+const FLOOD_DATA_SOURCE_URLS = [
+  TARGET_URL,
+  `https://api.allorigins.win/raw?url=${encodeURIComponent(TARGET_URL)}`,
+  "https://r.jina.ai/http://hydro.chmi.cz/hppsoldv/hpps_prfdata.php?seq=307024",
+];
 const DEFAULT_CHART_COLORS = {
   stroke: "hsl(180 60% 40%)",
   fill: "hsl(215 80% 30% / 0.35)",
   grid: "hsl(220 10% 70% / 0.2)",
   text: "currentColor",
 };
+
+export function getFloodDataSourceUrls() {
+  return FLOOD_DATA_SOURCE_URLS;
+}
+
+async function fetchFloodHtml() {
+  for (const sourceUrl of getFloodDataSourceUrls()) {
+    try {
+      const response = await fetch(sourceUrl, {
+        cache: "no-store",
+        headers: {
+          Accept: "text/html",
+        },
+      });
+
+      if (!response.ok) {
+        continue;
+      }
+
+      return await response.text();
+    } catch {
+      // Try next source.
+    }
+  }
+
+  throw new Error("Unable to load flood data");
+}
 
 function parseDate(dateString: string) {
   const trimmed = dateString.trim();
@@ -69,13 +101,7 @@ function parseDate(dateString: string) {
 
 async function fetchData(): Promise<FloodRecord[]> {
   try {
-    const response = await fetch(API_URL);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const text = await response.text();
+    const text = await fetchFloodHtml();
     const parser = new DOMParser();
     const doc = parser.parseFromString(text, "text/html");
 
