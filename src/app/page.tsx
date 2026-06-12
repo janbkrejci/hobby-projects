@@ -80,20 +80,22 @@ export default function Home() {
               Otevřít playground →
             </span>
           </Link>
-          <Link
-            href="/flood-scraper"
-            className="group flex h-full flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-          >
+          <div className="flex h-full flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm opacity-60">
             <div>
-              <h2 className="text-xl font-semibold">Hladina Výrovky</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-semibold">Hladina Výrovky</h2>
+                <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                  Vyžaduje backend
+                </span>
+              </div>
               <p className="mt-2 text-sm text-muted-foreground">
                 Graf historických měření s automatickou aktualizací.
               </p>
             </div>
-            <span className="mt-6 text-sm font-medium text-foreground">
-              Otevřít graf →
+            <span className="mt-6 text-sm text-muted-foreground">
+              Nelze zobrazit přes GitHub Pages
             </span>
-          </Link>
+          </div>
         </div>
       </main>
     </div>
